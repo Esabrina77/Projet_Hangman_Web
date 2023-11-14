@@ -41,17 +41,48 @@ var (
 	mots     []string
 )
 
+func resultTemplate(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "home", nil)
+}
+func selectionHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "selection", nil)
+}
+func easyHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "easy", nil)
+}
+func mediumHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "medium", nil)
+}
+func hardHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "hard", nil)
+}
+func goldlevelHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "goldlevel", nil)
+}
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "result", nil)
 }
-func resultTemplate(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "home", nil)
+func getOutHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "getOut", nil)
+}
+func resultHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "result", gameData)
 }
 
 func playHandler(w http.ResponseWriter, r *http.Request) {
 
+	funcMap := template.FuncMap{
+		"splitWordToGuess": splitWordToGuess,
+	}
+	tmpl := template.Must(template.New("medium.html").Funcs(funcMap).ParseFiles("medium.html"))
+	err := tmpl.Execute(w, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	if r.Method == "GET" {
-		temp.ExecuteTemplate(w, "play", nil)
+		temp.ExecuteTemplate(w, "home", nil)
 
 	} else if r.Method == "POST" {
 		guessedLetter := r.FormValue("guessedLetter")
@@ -71,15 +102,15 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	Difficulty := r.FormValue("Difficulty")
 	switch Difficulty {
 	case "Facile":
-		http.Redirect(w, r, "game/easy", http.StatusSeeOther)
+		http.Redirect(w, r, "/easy", http.StatusSeeOther)
 	case "Moyen":
-		http.Redirect(w, r, "game/medium", http.StatusSeeOther)
+		http.Redirect(w, r, "/medium", http.StatusSeeOther)
 	case "Difficile":
-		http.Redirect(w, r, "game/hard", http.StatusSeeOther)
+		http.Redirect(w, r, "/hard", http.StatusSeeOther)
 	case "Gold Level":
-		http.Redirect(w, r, "game/hard level", http.StatusSeeOther)
+		http.Redirect(w, r, "/hard level", http.StatusSeeOther)
 	default:
-		http.Redirect(w, r, "game/easy", http.StatusSeeOther)
+		http.Redirect(w, r, "/easy", http.StatusSeeOther)
 	}
 }
 
@@ -99,7 +130,6 @@ func setWord(level GameData) {
 	}
 	gameData = level
 }
-
 func contains(slice []string, str string) bool {
 	for _, k := range slice {
 		if k == str {
@@ -124,7 +154,7 @@ func checkLost(life int) bool {
 
 func main() {
 	//Ouverture du fichier
-	file, err := os.Open("mots.txt")
+	file, err := os.Open("DICTIONNAIRE/mots.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -147,13 +177,21 @@ func main() {
 
 	setWord(gameData)
 
+	bookServer := http.FileServer(http.Dir("DICTIONNAIRE"))
+	http.Handle("/DICTIONNAIRE/", http.StripPrefix("/DICTIONNAIRE/", bookServer))
+
 	fileServer := http.FileServer(http.Dir("CSS"))
 	http.Handle("/CSS/", http.StripPrefix("/CSS/", fileServer))
 	http.HandleFunc("/home", HomeHandler)
-	http.HandleFunc("/result", HomeHandler)
+	http.HandleFunc("/play", playHandler)
+	http.HandleFunc("/result", resultHandler)
+	http.HandleFunc("/selection", selectionHandler)
+	http.HandleFunc("/easy", easyHandler)
+	http.HandleFunc("/medium", mediumHandler)
+	http.HandleFunc("/hard", hardHandler)
+	http.HandleFunc("/goldlevel", goldlevelHandler)
+	http.HandleFunc("/getOut", getOutHandler)
 	http.ListenAndServe(port, nil)
-
-	//
 
 }
 
@@ -185,4 +223,12 @@ func afficherPendu(pendu []string, vie int) {
 	} else {
 		fmt.Println(pendu[len(pendu)-1])
 	}
+}
+
+func splitWordToGuess(mot string) []string {
+	display := make([]string, len(mot))
+	for i, l := range mot {
+		display[i] = string(l)
+	}
+	return display
 }

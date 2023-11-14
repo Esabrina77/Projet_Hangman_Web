@@ -1,0 +1,16 @@
+{{define "home"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome to Hangman Game</title>
+</head>
+<body>
+	<h1>Welcome to Hangman Game</h1>
+	<form method="POST" action="/selection">
+		<label for="name">Enter your name:</label>
+		<input type="text" name="name" id="name" required>
+		<input type="submit" value="Start Game">
+	</form>
+</body>
+</html>
+{{end}}
