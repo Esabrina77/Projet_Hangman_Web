@@ -3,12 +3,14 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/CSS/style.css" >
   <title>Jeu du Pendu - Jouer</title>
 </head>
 <body>
     <div id="AFFICHAGE">
-  <h1>Jeu du Pendu</h1>
-  <h2>Bienvenue, {{range .Name}}{{.Name}}{{end}}!</h2>
+  <h1>easy level</h1>
+  <p>{{.Name}}</p>
   <h3>Vie restante: {{.Life}}</h3>
   <h3>Mot à deviner: {{.WordToGuess}}</h3>
 

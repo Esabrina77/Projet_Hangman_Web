@@ -22,21 +22,17 @@ type GameData struct {
 	GuessedLetters  []string //lettre devinées
 	ProposedLetters map[string]bool
 	Score           int
-	Life            int        //vie restante
-	Name            []DataUser //nom du joueur
-	IsWin           bool       //indique le joueur a trouvé toutes les letttres
-	IsLost          bool       //indique que le joueur n'a pas trouvé toutes les lettres
+	Life            int    //vie restante
+	Name            string //nom du joueur
+	IsWin           bool   //indique le joueur a trouvé toutes les letttres
+	IsLost          bool   //indique que le joueur n'a pas trouvé toutes les lettres
 
-}
-type DataUser struct {
-	Name string
 }
 
 var (
 	counter  int
 	temp     *template.Template
 	err      error
-	user     DataUser
 	gameData GameData
 	mots     []string
 )
@@ -46,32 +42,57 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TreatHandler(w http.ResponseWriter, r *http.Request) {
-	user = DataUser{
-		Name: r.FormValue("name"),
-	}
-	if user.Name == "" {
+	gameData.Name = r.FormValue("name")
+
+	if gameData.Name == "" {
 		errorMessage := "VEILLEZ REMPLIR TOUS  LES CHAMPS DU FORMULAIRE"
 		http.Redirect(w, r, "/user/home?error="+errorMessage, http.StatusSeeOther)
 		return
 	}
 	http.Redirect(w, r, "/selection", http.StatusSeeOther)
+
 }
 
 func selectionHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "selection", user)
+	temp.ExecuteTemplate(w, "selection", gameData.Name)
 }
 
 func easyHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "easy", nil)
+	setWord("Facile")
+	data := GameData{
+		Name:        gameData.Name,
+		Life:        gameData.Life,
+		WordToGuess: gameData.WordToGuess,
+	}
+
+	temp.ExecuteTemplate(w, "easy", data)
 }
 func mediumHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "medium", nil)
+	setWord("moyen")
+	data := GameData{
+		Name:        gameData.Name,
+		Life:        gameData.Life,
+		WordToGuess: gameData.WordToGuess,
+	}
+	temp.ExecuteTemplate(w, "medium", data)
 }
 func hardHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "hard", nil)
+	setWord("Difficile")
+	data := GameData{
+		Name:        gameData.Name,
+		Life:        gameData.Life,
+		WordToGuess: gameData.WordToGuess,
+	}
+	temp.ExecuteTemplate(w, "hard", data)
 }
 func goldlevelHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "goldlevel", nil)
+	setWord("Goldlevel")
+	data := GameData{
+		Name:        gameData.Name,
+		Life:        gameData.Life,
+		WordToGuess: gameData.WordToGuess,
+	}
+	temp.ExecuteTemplate(w, "goldlevel", data)
 }
 
 func getOutHandler(w http.ResponseWriter, r *http.Request) {
@@ -81,68 +102,22 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "result", gameData)
 }
 
-func playHandler(w http.ResponseWriter, r *http.Request) {
-
-	funcMap := template.FuncMap{
-		"splitWordToGuess": splitWordToGuess,
-	}
-	tmpl := template.Must(template.New("medium.html").Funcs(funcMap).ParseFiles("medium.html"))
-	err := tmpl.Execute(w, nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if r.Method == "GET" {
-		temp.ExecuteTemplate(w, "home", nil)
-
-	} else if r.Method == "POST" {
-		guessedLetter := r.FormValue("guessedLetter")
-		//mise à jour
-		gameData.Life = UpdateLife(gameData.Life, guessedLetter)
-		gameData.GuessedLetters = append(gameData.GuessedLetters, guessedLetter)
-		gameData.ProposedLetters[guessedLetter] = true
-		gameData.IsWin = checkWin(gameData.WordToGuess, gameData.GuessedLetters)
-		gameData.IsLost = checkLost(gameData.Life)
-
-		if gameData.IsWin || gameData.IsLost {
-			http.Redirect(w, r, "/result", http.StatusSeeOther)
-		} else {
-			temp.ExecuteTemplate(w, "play", gameData)
-		}
-	}
-	Difficulty := r.FormValue("Difficulty")
-
-	switch Difficulty {
+func setWord(level string) {
+	switch level {
 	case "Facile":
-		http.Redirect(w, r, "/easy", http.StatusSeeOther)
+		gameData.WordToGuess = choisirMot(mots, 2, 6)
 	case "Moyen":
-		http.Redirect(w, r, "/medium", http.StatusSeeOther)
+		gameData.WordToGuess = choisirMot(mots, 6, 11)
 	case "Difficile":
-		http.Redirect(w, r, "/hard", http.StatusSeeOther)
-	case "Gold Level":
-		http.Redirect(w, r, "/hard level", http.StatusSeeOther)
+		gameData.WordToGuess = choisirMot(mots, 11, 19)
+	case "Goldlevel":
+		gameData.WordToGuess = choisirMot(mots, 19, 100)
 	default:
-		http.Redirect(w, r, "/easy", http.StatusSeeOther)
+		gameData.WordToGuess = choisirMot(mots, 2, 700)
 	}
+
 }
 
-func setWord(level GameData) {
-
-	switch level.Difficulty {
-	case "Facile":
-		level.WordToGuess = choisirMot(mots, 2, 6)
-	case "Moyen":
-		level.WordToGuess = choisirMot(mots, 7, 10)
-	case "Difficile":
-		level.WordToGuess = choisirMot(mots, 11, 18)
-	case "Gold Level":
-		level.WordToGuess = choisirMot(mots, 19, 100)
-	default:
-		level.WordToGuess = choisirMot(mots, 2, 700)
-	}
-	gameData = level
-}
 func contains(slice []string, str string) bool {
 	for _, k := range slice {
 		if k == str {
@@ -188,15 +163,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	setWord(gameData)
-
 	bookServer := http.FileServer(http.Dir("DICTIONNAIRE"))
 	http.Handle("/DICTIONNAIRE/", http.StripPrefix("/DICTIONNAIRE/", bookServer))
 
 	fileServer := http.FileServer(http.Dir("CSS"))
 	http.Handle("/CSS/", http.StripPrefix("/CSS/", fileServer))
 	http.HandleFunc("/home", homeHandler)
-	http.HandleFunc("/play", playHandler)
 	http.HandleFunc("/result", resultHandler)
 	http.HandleFunc("/selection", selectionHandler)
 	http.HandleFunc("/easy", easyHandler)
@@ -205,7 +177,9 @@ func main() {
 	http.HandleFunc("/goldlevel", goldlevelHandler)
 	http.HandleFunc("/getOut", getOutHandler)
 	http.HandleFunc("/treatment", TreatHandler)
-	http.ListenAndServe(port, nil)
+	if err := http.ListenAndServe(port, nil); err != nil {
+		log.Fatal(err)
+	}
 
 }
 

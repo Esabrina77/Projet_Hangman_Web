@@ -3,11 +3,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/CSS/style.css" >
     <title>Jeu du Pendu</title>
 </head>
 <body>
+    <div id="AFFICHAGE">
     <h1>Jeu du Pendu</h1>
-    <h2>Difficulté : {{.Difficulty}}</h2>
+    <h2>medium level</h2>
     <h3>Mot à deviner :{{.WordToGuess}}</h3>
     <p>
 
@@ -20,6 +23,7 @@
         <input type="text" name="guessedLetter" maxlength="1" required>
         <input type="submit" value="Devinez">
     </form>
+    </div>
 </body>
 </html>
 
