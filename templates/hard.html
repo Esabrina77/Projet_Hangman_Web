@@ -1,7 +1,4 @@
-{{define "hard"}}
-
-
-
+{{define "goldlevel"}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +14,7 @@
       <h3>Vie restante: {{.Life}}</h3>
       <h3>Mot à deviner: {{.WordToGuess}}</h3>
     
-      <form action="/" method="POST">
+      <form action="/guess" method="POST">
         <label for="guessedLetter">Lettre à proposer:</label>
         <input type="text" id="guessedLetter" name="guessedLetter" maxlength="1" required>
         <br>
@@ -26,9 +23,6 @@
 </div>
 </body>
 </html>
-
-
-
 
 
 {{end}}

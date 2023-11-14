@@ -81,7 +81,7 @@ ol li {
     width: 25%;
     height: 25%;
     z-index: -1;
-    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+    background-image: linear-gradient(147deg, #FFE53B 0%, rgb(80, 27, 167) 74%);
     transition: all .5s;
   }
   .container a:hover ~ .bg {

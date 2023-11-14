@@ -17,24 +17,25 @@ const port = "localhost:8080"
 
 // structure pour le stock des données de la partie en cours
 type GameData struct {
-	WordToGuess     string   //mot à deviner
-	Difficulty      string   // pour choisir le niveau de difficulté
-	GuessedLetters  []string //lettre devinées
-	ProposedLetters map[string]bool
-	Score           int
-	Life            int    //vie restante
-	Name            string //nom du joueur
-	IsWin           bool   //indique le joueur a trouvé toutes les letttres
-	IsLost          bool   //indique que le joueur n'a pas trouvé toutes les lettres
+	WordToGuess    string   //mot à deviner
+	Difficulty     string   // pour choisir le niveau de difficulté
+	GuessedLetters []string //lettre devinées
+	Score          int
+	Life           int    //vie restante
+	Name           string //nom du joueur
+	IsWin          bool   //indique le joueur a trouvé toutes les letttres
+	IsLost         bool   //indique que le joueur n'a pas trouvé toutes les lettres
 
 }
 
 var (
-	counter  int
-	temp     *template.Template
-	err      error
-	gameData GameData
-	mots     []string
+	counter          int
+	temp             *template.Template
+	err              error
+	gameData         GameData
+	mots             []string
+	lettresproposees = make(map[string]bool) //verification
+	Difficulty       string
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,6 +60,7 @@ func selectionHandler(w http.ResponseWriter, r *http.Request) {
 
 func easyHandler(w http.ResponseWriter, r *http.Request) {
 	setWord("Facile")
+	Difficulty = "Facile"
 	data := GameData{
 		Name:        gameData.Name,
 		Life:        gameData.Life,
@@ -67,8 +69,10 @@ func easyHandler(w http.ResponseWriter, r *http.Request) {
 
 	temp.ExecuteTemplate(w, "easy", data)
 }
+
 func mediumHandler(w http.ResponseWriter, r *http.Request) {
-	setWord("moyen")
+	setWord("Moyen")
+	Difficulty = "Moyen"
 	data := GameData{
 		Name:        gameData.Name,
 		Life:        gameData.Life,
@@ -78,6 +82,7 @@ func mediumHandler(w http.ResponseWriter, r *http.Request) {
 }
 func hardHandler(w http.ResponseWriter, r *http.Request) {
 	setWord("Difficile")
+	Difficulty = "Difficile"
 	data := GameData{
 		Name:        gameData.Name,
 		Life:        gameData.Life,
@@ -87,6 +92,8 @@ func hardHandler(w http.ResponseWriter, r *http.Request) {
 }
 func goldlevelHandler(w http.ResponseWriter, r *http.Request) {
 	setWord("Goldlevel")
+
+	Difficulty = "Goldlevel"
 	data := GameData{
 		Name:        gameData.Name,
 		Life:        gameData.Life,
@@ -105,13 +112,13 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 func setWord(level string) {
 	switch level {
 	case "Facile":
-		gameData.WordToGuess = choisirMot(mots, 2, 6)
+		gameData.WordToGuess = choisirMot(mots, 2, 5)
 	case "Moyen":
-		gameData.WordToGuess = choisirMot(mots, 6, 11)
+		gameData.WordToGuess = choisirMot(mots, 5, 7)
 	case "Difficile":
-		gameData.WordToGuess = choisirMot(mots, 11, 19)
+		gameData.WordToGuess = choisirMot(mots, 7, 10)
 	case "Goldlevel":
-		gameData.WordToGuess = choisirMot(mots, 19, 100)
+		gameData.WordToGuess = choisirMot(mots, 10, 100)
 	default:
 		gameData.WordToGuess = choisirMot(mots, 2, 700)
 	}
@@ -139,8 +146,50 @@ func checkWin(wordToGuess string, guessedLetters []string) bool {
 func checkLost(life int) bool {
 	return life <= 0
 }
+func guessHandler(w http.ResponseWriter, r *http.Request) {
+	lettre := r.FormValue("guessedLetter")
+	fmt.Print(lettre)
+	if lettreDejaProposee(lettre, lettresproposees) {
 
+		switch Difficulty {
+		case "Facile":
+			http.Redirect(w, r, "/easy", http.StatusSeeOther)
+			return
+		case "Moyen":
+			http.Redirect(w, r, "/medium", http.StatusSeeOther)
+			return
+		case "Difficile":
+			http.Redirect(w, r, "/easy", http.StatusSeeOther)
+			return
+		case "Goldlevel":
+			http.Redirect(w, r, "/easy", http.StatusSeeOther)
+			return
+		default:
+			http.Redirect(w, r, "/selection", http.StatusSeeOther)
+			return
+		}
+	} else {
+		switch Difficulty {
+		case "Facile":
+			http.Redirect(w, r, "/easy", http.StatusSeeOther)
+			return
+		case "Moyen":
+			http.Redirect(w, r, "/medium", http.StatusSeeOther)
+			return
+		case "Difficile":
+			http.Redirect(w, r, "/easy", http.StatusSeeOther)
+			return
+		case "Goldlevel":
+			http.Redirect(w, r, "/easy", http.StatusSeeOther)
+			return
+		default:
+			http.Redirect(w, r, "/selection", http.StatusSeeOther)
+			return
+		}
+	}
+}
 func main() {
+	gameData.Life = 9
 	//Ouverture du fichier
 	file, err := os.Open("DICTIONNAIRE/mots.txt")
 	if err != nil {
@@ -177,6 +226,7 @@ func main() {
 	http.HandleFunc("/goldlevel", goldlevelHandler)
 	http.HandleFunc("/getOut", getOutHandler)
 	http.HandleFunc("/treatment", TreatHandler)
+	http.HandleFunc("/guess", guessHandler)
 	if err := http.ListenAndServe(port, nil); err != nil {
 		log.Fatal(err)
 	}
@@ -193,7 +243,7 @@ func choisirMot(mots []string, minLen, maxLen int) string {
 		}
 	}
 	rand.Seed(time.Now().UnixNano())
-	index := rand.Intn(len(motsFiltres))
+	index := rand.Intn(len(motsFiltres) - 1)
 	return motsFiltres[index]
 }
 
@@ -213,10 +263,23 @@ func afficherPendu(pendu []string, vie int) {
 	}
 }
 
-func splitWordToGuess(mot string) []string {
-	display := make([]string, len(mot))
+func afficherMot(mot string, lettresDevinees []bool) string {
+	var affichage string
 	for i, l := range mot {
-		display[i] = string(l)
+		if lettresDevinees[i] {
+			affichage += string(l) + " "
+		} else {
+			affichage += "_"
+		}
 	}
-	return display
+	return affichage
+}
+
+func lettreDejaProposee(lettre string, lettresproposees map[string]bool) bool {
+	for k := range lettresproposees {
+		if strings.ContainsRune(k, []rune(lettre)[0]) {
+			return true
+		}
+	}
+	return false
 }
