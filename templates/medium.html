@@ -10,13 +10,7 @@
     <h2>Difficulté : {{.Difficulty}}</h2>
     <h3>Mot à deviner :{{.WordToGuess}}</h3>
     <p>
-        {{range $index, $letter := splitWordToGuess .WordToGuess}}
-            {{if contains $.GuessedLetters $letter}}
-                {{$letter}}
-            {{else}}
-                _
-            {{end}}
-        {{end}}
+
         </p>
     <h3>Lettres devinées :</h3>
     <p>{{range $index, $letter := .GuessedLetters}}{{$letter}}{{end}}</p>

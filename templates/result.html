@@ -1,0 +1,28 @@
+{{define "result"}}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/CSS/style.css" >
+  <title>Jeu du Pendu - Résultat</title>
+</head>
+<body>
+    <div id="AFFICHAGE">
+  <h1>Jeu du Pendu</h1>
+  <h2>Résultat</h2>
+  
+  {{if .IsWin}}
+    <h3>Bravo, vous avez trouvé toutes les lettres du mot "{{.WordToGuess}}" !</h3>
+  {{else if .IsLost}}
+    <h3>Dommage, vous avez perdu. Le mot à deviner était "{{.WordToGuess}}".</h3>
+  {{end}}
+  
+  <h3>Score: {{.Score}}</h3>
+  
+  <a href="/home">Rejouer</a>
+</div>
+</body>
+</html>
+   
+{{end}}

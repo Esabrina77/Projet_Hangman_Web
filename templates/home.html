@@ -2,15 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/CSS/style.css" >
 	<title>Welcome to Hangman Game</title>
 </head>
 <body>
+	<div id="AFFICHAGE">
 	<h1>Welcome to Hangman Game</h1>
-	<form method="POST" action="/selection">
+	<form method="POST" action="/treatment">
 		<label for="name">Enter your name:</label>
 		<input type="text" name="name" id="name" required>
 		<input type="submit" value="Start Game">
 	</form>
+</div>
 </body>
 </html>
 {{end}}

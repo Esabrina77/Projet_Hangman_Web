@@ -41,12 +41,26 @@ var (
 	mots     []string
 )
 
-func resultTemplate(w http.ResponseWriter, r *http.Request) {
+func homeHandler(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "home", nil)
 }
-func selectionHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "selection", nil)
+
+func TreatHandler(w http.ResponseWriter, r *http.Request) {
+	user = DataUser{
+		Name: r.FormValue("name"),
+	}
+	if user.Name == "" {
+		errorMessage := "VEILLEZ REMPLIR TOUS  LES CHAMPS DU FORMULAIRE"
+		http.Redirect(w, r, "/user/home?error="+errorMessage, http.StatusSeeOther)
+		return
+	}
+	http.Redirect(w, r, "/selection", http.StatusSeeOther)
 }
+
+func selectionHandler(w http.ResponseWriter, r *http.Request) {
+	temp.ExecuteTemplate(w, "selection", user)
+}
+
 func easyHandler(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "easy", nil)
 }
@@ -59,9 +73,7 @@ func hardHandler(w http.ResponseWriter, r *http.Request) {
 func goldlevelHandler(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "goldlevel", nil)
 }
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "result", nil)
-}
+
 func getOutHandler(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "getOut", nil)
 }
@@ -100,6 +112,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	Difficulty := r.FormValue("Difficulty")
+
 	switch Difficulty {
 	case "Facile":
 		http.Redirect(w, r, "/easy", http.StatusSeeOther)
@@ -182,7 +195,7 @@ func main() {
 
 	fileServer := http.FileServer(http.Dir("CSS"))
 	http.Handle("/CSS/", http.StripPrefix("/CSS/", fileServer))
-	http.HandleFunc("/home", HomeHandler)
+	http.HandleFunc("/home", homeHandler)
 	http.HandleFunc("/play", playHandler)
 	http.HandleFunc("/result", resultHandler)
 	http.HandleFunc("/selection", selectionHandler)
@@ -191,6 +204,7 @@ func main() {
 	http.HandleFunc("/hard", hardHandler)
 	http.HandleFunc("/goldlevel", goldlevelHandler)
 	http.HandleFunc("/getOut", getOutHandler)
+	http.HandleFunc("/treatment", TreatHandler)
 	http.ListenAndServe(port, nil)
 
 }
