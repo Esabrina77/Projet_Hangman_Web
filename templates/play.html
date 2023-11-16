@@ -1,4 +1,4 @@
-{{define "easy"}}
+{{define "play"}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,11 +9,12 @@
 </head>
 <body>
     <div id="AFFICHAGE">
-  <h1>easy level</h1>
+  <h1>{{.Difficulty}} level</h1>
   <p>{{.Name}}</p>
   <h3>Vie restante: {{.Life}}</h3>
-  <h3>Mot à deviner: {{.WordToGuess}}</h3>
-
+  <h3>Mot à deviner:{{.Affichage}}</h3>
+  <h3>Scorer: {{.Score}}</h3>
+  <h3>Lettres Proposées : {{.lettre}}</h3>
  
    <form action="/guess" method="POST">
     <label for="guessedLetter">Lettre à proposer:</label>
