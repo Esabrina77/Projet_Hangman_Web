@@ -1,4 +1,4 @@
-package main
+package hangman
 
 import (
 	"fmt"
@@ -15,22 +15,19 @@ const port = "localhost:8080"
 
 // structure pour le stock des données de la partie en cours
 type GameData struct {
-	WordToGuess      string   //mot à deviner
-	Difficulty       string   // pour choisir le niveau de difficulté
-	GuessedLetters   []string //lettre devinées
-	Score            int
-	Life             int    //vie restante
-	Name             string //nom du joueur
-	IsWin            bool   //indique le joueur a trouvé toutes les letttres
-	Affichage        []string
-	WORD             string
-	Gameletters      string
-	lettresproposees (map[string]bool)
+	WordToGuess    string   //mot à deviner
+	Difficulty     string   // pour choisir le niveau de difficulté
+	GuessedLetters []string //lettre devinées
+	Score          int
+	Life           int    //vie restante
+	Name           string //nom du joueur
+	IsWin          bool   //indique le joueur a trouvé toutes les letttres
+	Affichage      []string
+	WORD           string
+	Gameletters    string
 }
 
 var (
-	pendu            []string
-	lettresDevinees  = make([]bool, len(gameData.WordToGuess))
 	temp             *template.Template
 	err              error
 	gameData         GameData
@@ -215,7 +212,7 @@ func retreiveWord() {
 }
 
 // FONCTION MAIN---------PRINCIPALE
-func main() {
+func Serveur() {
 	temp, err = template.ParseGlob("templates/*.html")
 	if err != nil {
 		fmt.Println(err)

@@ -8,10 +8,10 @@
   <title>Jeu du Pendu - Résultat</title>
 </head>
 <body>
-    <div id="AFFICHAGE">
+    
+  <div id="result">
   <h1>Jeu du Pendu</h1>
   <h2>Résultat</h2>
-  
   {{if eq .Life   0 }}
     <h3>Dommage, vous avez perdu. Le mot à deviner était "{{.WordToGuess}}".</h3>
     <img src="../CSS/LOST.jpg" alt="perdu">
@@ -19,10 +19,15 @@
   <h3>Bravo, vous avez trouvé toutes les lettres du mot "{{.WordToGuess}}" !</h3>
   <img src="../CSS/WIN.jpg" alt="perdu">
   {{end}}
-  
   <h3>Score: {{.Score}}</h3>
   
-  <a href="/selection">Rejouer</a>
+
+  <div class="container">
+    <a href="/selection">Rejouer</a>
+    <i class="fas fa-arrow-right"></i>
+    <div class="bg"></div>
+  </div>
+ 
 </div>
 </body>
 </html>

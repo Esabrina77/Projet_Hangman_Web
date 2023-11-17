@@ -21,7 +21,7 @@ body{
 }
 
 #AFFICHAGE{
-    background-color: bisque;
+    background-color: rgba(0, 0, 255, 0.354);
     margin: 3% ;
     padding: 20px 10px;
     height: 25%;
@@ -97,4 +97,11 @@ ol li {
   display: flex;
   flex-direction: column;
   align-items: center;  
+  }
+
+  #result{
+    
+    margin: 5px;
+    width:40%;
+    height: 40%;
   }
