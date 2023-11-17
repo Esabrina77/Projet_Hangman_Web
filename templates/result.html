@@ -12,15 +12,17 @@
   <h1>Jeu du Pendu</h1>
   <h2>Résultat</h2>
   
-  {{if .IsWin}}
-    <h3>Bravo, vous avez trouvé toutes les lettres du mot "{{.WordToGuess}}" !</h3>
-  {{else if .IsLost}}
+  {{if eq .Life   0 }}
     <h3>Dommage, vous avez perdu. Le mot à deviner était "{{.WordToGuess}}".</h3>
+    <img src="../CSS/LOST.jpg" alt="perdu">
+  {{else }}
+  <h3>Bravo, vous avez trouvé toutes les lettres du mot "{{.WordToGuess}}" !</h3>
+  <img src="../CSS/WIN.jpg" alt="perdu">
   {{end}}
   
   <h3>Score: {{.Score}}</h3>
   
-  <a href="/home">Rejouer</a>
+  <a href="/selection">Rejouer</a>
 </div>
 </body>
 </html>

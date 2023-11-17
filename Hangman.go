@@ -15,15 +15,17 @@ const port = "localhost:8080"
 
 // structure pour le stock des données de la partie en cours
 type GameData struct {
-	WordToGuess    string   //mot à deviner
-	Difficulty     string   // pour choisir le niveau de difficulté
-	GuessedLetters []string //lettre devinées
-	Score          int
-	Life           int    //vie restante
-	Name           string //nom du joueur
-	IsWin          bool   //indique le joueur a trouvé toutes les letttres
-	IsLost         bool   //indique que le joueur n'a pas trouvé toutes les lettres
-	Affichage      []string
+	WordToGuess      string   //mot à deviner
+	Difficulty       string   // pour choisir le niveau de difficulté
+	GuessedLetters   []string //lettre devinées
+	Score            int
+	Life             int    //vie restante
+	Name             string //nom du joueur
+	IsWin            bool   //indique le joueur a trouvé toutes les letttres
+	Affichage        []string
+	WORD             string
+	Gameletters      string
+	lettresproposees (map[string]bool)
 }
 
 var (
@@ -37,8 +39,17 @@ var (
 )
 
 func initHandler(w http.ResponseWriter, r *http.Request) {
+
+	gameData.Life = 4
+	gameData.IsWin = checkWin(gameData.WordToGuess, gameData.GuessedLetters)
+
 	gameData.Difficulty = strings.TrimPrefix(r.URL.Path, "/init/")
-	gameData.Life = 9
+	switch gameData.Difficulty {
+	case "Facile", "Moyen", "Difficile", "Goldlevel":
+		break
+	default:
+		http.Redirect(w, r, "/selection", http.StatusMovedPermanently)
+	}
 	retreiveWord()
 	setWord(gameData.Difficulty)
 	InitMot()
@@ -52,7 +63,6 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 func TreatHandler(w http.ResponseWriter, r *http.Request) {
 	gameData.Name = r.FormValue("name")
-
 	if gameData.Name == "" {
 		errorMessage := "VEILLEZ REMPLIR TOUS  LES CHAMPS DU FORMULAIRE"
 		http.Redirect(w, r, "/user/home?error="+errorMessage, http.StatusSeeOther)
@@ -67,6 +77,8 @@ func selectionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func playHandler(w http.ResponseWriter, r *http.Request) {
+	gameData.WORD = strings.Join(gameData.Affichage, "")
+	gameData.Gameletters = strings.Join(gameData.GuessedLetters, ", ")
 
 	fmt.Println(gameData.Affichage)
 	fmt.Println(gameData.WordToGuess)
@@ -77,13 +89,13 @@ func getOutHandler(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "getOut", nil)
 }
 func resultHandler(w http.ResponseWriter, r *http.Request) {
-	temp.ExecuteTemplate(w, "result", gameData)
+	resultData := gameData
+	gameData = GameData{} //reset le jeu
+	gameData.Name = resultData.Name
+	lettresproposees = make(map[string]bool)
+	temp.ExecuteTemplate(w, "result", resultData)
 }
 
-/*
-une liste de mot est attribué à
-chaque niveau de difficulté en fonction de la longueur du mot
-*/
 func setWord(level string) {
 	switch level {
 	case "Facile":
@@ -110,11 +122,12 @@ func contains(slice []string, str string) bool {
 }
 
 // Mise à jour de la vie
-func UpdateLife(life int, letter string) int {
-	if !strings.Contains(gameData.WordToGuess, letter) {
-		life--
+func UpdateLife(lettre string) {
+	if !strings.Contains(gameData.WordToGuess, lettre) {
+		gameData.Life--
+	} else {
+		gameData.Score++
 	}
-	return life
 }
 
 func checkWin(wordToGuess string, guessedLetters []string) bool {
@@ -126,17 +139,26 @@ func checkWin(wordToGuess string, guessedLetters []string) bool {
 	return true
 }
 
-func checkLost(life int) bool {
-	return life <= 0
-}
-
 func guessHandler(w http.ResponseWriter, r *http.Request) {
 	lettre := r.FormValue("guessedLetter")
 	fmt.Println(lettre)
 
+	var toutesLesLettresTrouvees bool
+
 	if !lettreDejaProposee(lettre, lettresproposees) {
 		afficherMot(lettre)
+		UpdateLife(lettre)
+		fmt.Println("wordtoguess: ", gameData.WordToGuess, "  gameData.Affichage: ", strings.Join(gameData.Affichage, ""))
+		if gameData.WordToGuess == strings.Join(gameData.Affichage, "") {
+			toutesLesLettresTrouvees = true
+			fmt.Println("Check win: ", gameData.WordToGuess == strings.Join(gameData.Affichage, ""))
+		}
+		fmt.Println("Life: ", gameData.Life, "  win: ", toutesLesLettresTrouvees)
+		if gameData.Life == 0 || toutesLesLettresTrouvees {
+			http.Redirect(w, r, "/result", http.StatusSeeOther)
+		}
 	}
+	gameData.GuessedLetters = append(gameData.GuessedLetters, lettre)
 	http.Redirect(w, r, "/play", http.StatusSeeOther)
 
 }
@@ -168,7 +190,7 @@ func afficherMot(guess string) {
 	guessRunes := []rune(guess)[0]
 	for i, char := range wordRunes {
 		if char == guessRunes {
-			gameData.Affichage[i] = guess
+			gameData.Affichage[i] = string(guess)
 		}
 	}
 }
@@ -179,6 +201,7 @@ func lettreDejaProposee(lettre string, lettresproposees map[string]bool) bool {
 			return true
 		}
 	}
+	lettresproposees[lettre] = true
 	return false
 }
 
@@ -189,7 +212,6 @@ func retreiveWord() {
 		log.Fatal(err)
 	}
 	mots = strings.Split(string(content), "\n")
-
 }
 
 // FONCTION MAIN---------PRINCIPALE
@@ -199,9 +221,6 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	bookServer := http.FileServer(http.Dir("DICTIONNAIRE"))
-	http.Handle("/DICTIONNAIRE/", http.StripPrefix("/DICTIONNAIRE/", bookServer))
 
 	fileServer := http.FileServer(http.Dir("CSS"))
 	http.Handle("/CSS/", http.StripPrefix("/CSS/", fileServer))
