@@ -12,7 +12,8 @@
 	<h1>Welcome to Hangman Game</h1>
 	<form method="POST" action="/treatment">
 		<label for="name">Enter your name:</label>
-		<input type="text" name="name" id="name" required>
+		<input type="text" name="name" id="name" required oninvalid="this.setCustomValidity('Entrer votre nom pour Jouer')"
+		oninput="this.setCustomValidity('')">
 		<input type="submit" value="Start Game">
 	</form>
 </div>

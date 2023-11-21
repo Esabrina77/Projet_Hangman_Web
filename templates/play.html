@@ -15,13 +15,20 @@
   <h3>Mot à deviner:{{.WORD}}</h3>
   <h3>Score: {{.Score}}</h3>
   <h3>Lettres Proposées : {{.Gameletters}}</h3>
- 
    <form action="/guess" method="POST">
     <label for="guessedLetter">Lettre à proposer:</label>
-    <input type="text" id="guessedLetter" name="guessedLetter" maxlength="1" required>
+    <input type="text" id="guessedLetter" name="guessedLetter" maxlength="1" required oninvalid="this.setCustomValidity('Veuillez entrer une lettre')"
+		oninput="this.setCustomValidity('')">
     <br>
+    {{range .Guessedletters}}
+    {{if eq .Gameletters .GuessedLetters}}
+    <h3>Lettres Erronées : {{.GuessedLetters}}</h3>
+    {{end}}
+   {{end}}
     <div class="container">
-    <button type="submit">Proposer</button>
+      <button type="submit">Proposer</button>
+      <i class="fas fa-arrow-right"></i>
+      <div class="bg"></div>
   </div>
   </form>
 </div>
