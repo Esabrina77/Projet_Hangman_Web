@@ -25,6 +25,8 @@ type GameData struct {
 	Affichage      []string
 	WORD           string
 	Gameletters    string
+	MessageR       string
+	//MessageI       string
 }
 
 var (
@@ -35,9 +37,9 @@ var (
 	lettresproposees = make(map[string]bool) //verification
 )
 
+// initialisation de l'espace de jeu
 func initHandler(w http.ResponseWriter, r *http.Request) {
-
-	gameData.Life = 4
+	gameData.Life = 8
 	gameData.IsWin = checkWin(gameData.WordToGuess, gameData.GuessedLetters)
 
 	gameData.Difficulty = strings.TrimPrefix(r.URL.Path, "/init/")
@@ -55,6 +57,8 @@ func initHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 	temp.ExecuteTemplate(w, "home", nil)
 }
 
@@ -70,6 +74,8 @@ func TreatHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func selectionHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 	temp.ExecuteTemplate(w, "selection", gameData.Name)
 }
 
@@ -143,6 +149,7 @@ func guessHandler(w http.ResponseWriter, r *http.Request) {
 	var toutesLesLettresTrouvees bool
 
 	if !lettreDejaProposee(lettre, lettresproposees) {
+		gameData.MessageR = ""
 		afficherMot(lettre)
 		UpdateLife(lettre)
 		fmt.Println("wordtoguess: ", gameData.WordToGuess, "  gameData.Affichage: ", strings.Join(gameData.Affichage, ""))
@@ -154,7 +161,13 @@ func guessHandler(w http.ResponseWriter, r *http.Request) {
 		if gameData.Life == 0 || toutesLesLettresTrouvees {
 			http.Redirect(w, r, "/result", http.StatusSeeOther)
 		}
+		//gameData.MessageI = "LETTRE INCORRECT"
+	} else {
+		//gameData.MessageI = ""
+		gameData.MessageR = "lettre déjà proposée"
+		fmt.Println("lettre déjà proposée")
 	}
+
 	gameData.GuessedLetters = append(gameData.GuessedLetters, lettre)
 	http.Redirect(w, r, "/play", http.StatusSeeOther)
 
@@ -218,7 +231,6 @@ func Serveur() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
 	fileServer := http.FileServer(http.Dir("CSS"))
 	http.Handle("/CSS/", http.StripPrefix("/CSS/", fileServer))
 	http.HandleFunc("/home", homeHandler)
