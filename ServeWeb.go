@@ -1,7 +1,13 @@
 package main
 
-import hangman "hangman/GAME"
+import (
+	//Hangman "hangman/GAME"
+	routeur "hangman/routeur"
+	initTemplate "hangman/templates"
+)
 
 func main() {
-	hangman.Serveur()
+	initTemplate.InitTemplate()
+
+	routeur.InitServe()
 }
