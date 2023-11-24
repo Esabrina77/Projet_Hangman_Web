@@ -9,6 +9,7 @@ import (
 func InitServe() {
 	fileServer := http.FileServer(http.Dir("CSS"))
 	http.Handle("/CSS/", http.StripPrefix("/CSS/", fileServer))
+
 	http.HandleFunc("/home", controller.HomeHandler)
 	http.HandleFunc("/result", controller.ResultHandler)
 	http.HandleFunc("/selection", controller.SelectionHandler)

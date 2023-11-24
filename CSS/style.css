@@ -6,10 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
 
-/* @font-face {
-  font-family: ;
-  src: url();
-} */
+
 
 body{
     background-color: rgb(0, 0, 0);   
@@ -18,7 +15,7 @@ body{
     align-items: center;
 }
 #selectionner{
-    background-image: url(/CSS/images/orion-nebula-galaxy-nebula-stars-space-dark.jpg);
+    background-image: url(/CSS/chaise.png);
     display: flex;
     justify-content:space-evenly;
     align-items: center;

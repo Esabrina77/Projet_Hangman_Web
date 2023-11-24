@@ -3,15 +3,16 @@
 <html>
 <head>
   <meta charset="UTF-8">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/CSS/style.css" >
+  <link rel="icon" type="image/x-icon" href="/CSS/stadia_controller_FILL0_wght400_GRAD0_opsz24.svg" >
+
   <title>Jeu du Pendu - Jouer</title>
 </head>
 <body>
     <div id="AFFICHAGE">
   <h1>NIVEAU: {{.Difficulty}}</h1>
-  <p>{{.Name}}</p>
+  <p>Joueur: {{.Name}}</p>
   <h3>Vie restante: {{.Life}}</h3>
   <h3>Mot à deviner:{{.WORD}}</h3>
   <h3>Score: {{.Score}}</h3>
@@ -23,28 +24,28 @@
 		oninput="this.setCustomValidity('')">
     <br>
     {{if eq .Life 8}}
-    <img src="../CSS/images/hangman_0.png" alt="pendu 0">
+    <img src="../CSS/images/pendu/hangman_0.png" alt="pendu 0">
     {{end}}
     {{if eq .Life 7}}
-    <img src="../CSS/images/hangman_1.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman_1.png" alt="pendu 1">
     {{end}}
     {{if eq .Life 6}}
-    <img src="../CSS/images/hangman_2.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman_2.png" alt="pendu 1">
     {{end}}
     {{if eq .Life 5}}
-    <img src="../CSS/images/hangman_3.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman_3.png" alt="pendu 1">
     {{end}}
     {{if eq .Life 4}}
-    <img src="../CSS/images/hangman_4.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman_4.png" alt="pendu 1">
     {{end}}
     {{if eq .Life 3}}
-    <img src="../CSS/images/hangman_5.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman_5.png" alt="pendu 1">
     {{end}}
     {{if eq .Life 2}}
-    <img src="../CSS/images/hangman_6.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman_6.png" alt="pendu 1">
     {{end}}
     {{if eq .Life 1}}
-    <img src="../CSS/images/hangman_7.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman_7.png" alt="pendu 1">
     {{end}}
 
        <!-- <button type="submit">Proposer</button> -->

@@ -3,14 +3,21 @@
     padding: 0;
     box-sizing: border-box;
 }
+@font-face {
+  font-family: Akronim;
+  src: url("/CSS/fontFamily/Akronim-Regular.ttf");
+} 
 body{
-     background-color: rgb(15, 14, 14);
+    margin: 30px; 
+    background-color: rgb(15, 14, 14);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
 }
 #HomeScreen{
+    font-family:  Akronim;
+    font-size: calc(.3rem + 1.6vw);
     align-self: center;
      width: 50%;
      height: 70%;
@@ -29,14 +36,18 @@ body{
 display: flex;
 justify-content: center;
 align-items: center;
+gap: calc(2rem + 1vw);
+margin: 1rem; /*rem : taille selon l'élément racine ; em : taille selon l'élément parent ; vh : pourcentage de la hauteur du viewport ; vw : pourcentage de la largeur du viewport ; px : nombre de pixels ; % : pourcentage de l'élément parent*/
 }
 
 input[type="submit"] {
-    width: 50px;
-    height: auto;
-    background-color: #ffaa7f;
+    background-color: #ff4500;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
   }
+
+button{
+    text-decoration: none;
+}
