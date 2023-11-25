@@ -27,7 +27,7 @@ body{
      flex-direction: column;
      justify-content: center;
      align-items: center;
-    background-image: url("../CSS/forêt.jpeg");
+    background-image: url("../CSS/images/forêt.jpeg");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -45,46 +45,56 @@ gap: calc(2rem + 1vw);
 margin: 1rem; /*rem : taille selon l'élément racine ; em : taille selon l'élément parent ; vh : pourcentage de la hauteur du viewport ; vw : pourcentage de la largeur du viewport ; px : nombre de pixels ; % : pourcentage de l'élément parent*/
 }
 
+input[type="text"] {
+  padding:0 20px;
+  font-size: calc(.2rem + 1.4vw);
+  font-family:Akronim;
+  color: rgb(203, 176, 228);
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.087);
+  border-radius: 28%;
+}
 input[type="submit"] {
     font-family:Akronim;
-    font-size: calc(.2rem + 1.1vw);
-    background-color: rgba(232, 81, 26, 0.632);
+    font-size: calc(.2rem + 1.vw);
+    background-color: rgba(255, 0, 0, 0.632);
     color: white;
     padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    border-style: inset;
+    border-radius: 50px;
+    cursor: pointer;
 }
 input[type="submit"]:hover{
     background-image: url("/CSS/images/corde1.jpg");
     background-position: center;
     background-size: cover;
-    font-size: calc(.3rem + 1.7vw);
-
+    font-size: calc(.3rem + 1.4vw);
 }
 
   .button {
     font-family:Akronim;
-    font-size: calc(.3rem + 1.6vw);
+    font-size: calc(.2rem + 1.1vw);
+    /* font-size: calc(.3rem + 1.6vw); */
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
     text-align: center;
     text-decoration: none;
-    background-color: #263427;
-    border-radius: 4px;
-    border-style: groove;
-    border: none;
+    background-color: rgb(37, 54, 49);
+    border-radius: 50px;
+    border-style: inset;
     cursor: pointer;
   }
   
-  /* Style lorsque le curseur survole le bouton */
   .button:hover {
     background-image: url("/CSS/images/texture-pierre-noire.jpg");
     background-position: center;
     background-size: cover;
+    font-size: calc(.3rem + 1.4vw);
+    /* font-size: calc(.3rem + 1.7vw); */
   
 }
 .button a:hover{
-  font-size: calc(.3rem + 1.7vw);
      color: white;
 }

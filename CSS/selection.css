@@ -17,6 +17,13 @@ body{
     background-image: url(/CSS/images/oeil1.jpg);
     background-position: center;
   }
+  h1{
+    color: rgb(211, 0, 0);
+    font-size: calc(.6rem + 1.7vw);
+    background-image: url("/CSS/images/oeil2.jpeg");
+    background-position: center;
+    background-size: cover;
+  }
 #selectionner{
     display: flex;
     justify-content:space-evenly;
@@ -24,15 +31,13 @@ body{
     margin: 2% 5px ;
     width: 70%;
 }
-
-
 #AFFICHAGE{
   font-family:  Akronim;
   font-size: calc(.1rem + 1.2vw);
   background-size: cover;
   background-image: url(/CSS/1pX9.gif);
   border-style: none;
-  border-radius: 38%;
+  border-radius: 50%;
     margin: 3%;
     padding: 20px 10px;
     height: 20%;
@@ -60,9 +65,9 @@ ol li {
     color: rgb(255, 255, 255);
     position: relative;
     cursor: pointer;
-    border-style: dotted ;
+    border-style:none;
     border-color: rgb(40, 39, 39);
-    border-radius: 17px;
+    border-radius: 20px;
     z-index: 5;
   }
 
@@ -70,7 +75,7 @@ ol li {
   .container a {
     color: rgb(255, 255, 255);
     text-decoration: none;
-    font-family: 'Lobster', cursive;
+    font-family:  Akronim,sans-serif;
   }
   .container i {
     margin-left: 5px;
@@ -89,9 +94,12 @@ ol li {
     width: 25%;
     height: 25%;
     z-index: -1;
-    background-image: linear-gradient(147deg, #625a23 0%, rgb(31, 19, 99) 74%);
+    background-image: linear-gradient(147deg, rgba(32, 32, 29, 0.541) 0%, rgb(176, 0, 0) 74%);
     transition: all .5s;
   }
   .container a:hover ~ .bg {
     width: 90%;
+  }
+  .container a:hover{
+    font-size: calc(1rem + 1.8vw);
   }
