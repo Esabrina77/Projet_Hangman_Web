@@ -1,0 +1,38 @@
+*{
+    opacity: 0.8;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@font-face {
+  font-family: Akronim;
+  src: url("/CSS/fontFamily/Akronim-Regular.ttf");
+} 
+body{
+    margin: 30px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+   background-size: cover;
+   background-repeat: no-repeat;
+    background-image: url("/CSS/images/texture-pierre-noire.jpg");
+
+}
+#HomeScreen{
+    font-family:  Akronim;
+    font-size: calc(.3rem + 1.6vw);
+    align-self: center;
+     width: 50%;
+     height: 70%;
+     margin: 2%;
+     padding: 10px 20px ;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+    background-image: url("../CSS/forêt.jpeg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

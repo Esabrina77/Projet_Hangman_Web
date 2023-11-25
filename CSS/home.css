@@ -9,7 +9,7 @@
 } 
 body{
     margin: 30px; 
-    background-color: rgb(15, 14, 14);
+    background-color: rgb(0, 0, 0);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,6 +32,11 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+a{
+    text-decoration: none;
+    color: white;
+}
 #Direction{
 display: flex;
 justify-content: center;
@@ -41,13 +46,45 @@ margin: 1rem; /*rem : taille selon l'élément racine ; em : taille selon l'él�
 }
 
 input[type="submit"] {
-    background-color: #ff4500;
+    font-family:Akronim;
+    font-size: calc(.2rem + 1.1vw);
+    background-color: rgba(232, 81, 26, 0.632);
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-  }
+}
+input[type="submit"]:hover{
+    background-image: url("/CSS/images/corde1.jpg");
+    background-position: center;
+    background-size: cover;
+    font-size: calc(.3rem + 1.7vw);
 
-button{
+}
+
+  .button {
+    font-family:Akronim;
+    font-size: calc(.3rem + 1.6vw);
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
     text-decoration: none;
+    background-color: #263427;
+    border-radius: 4px;
+    border-style: groove;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Style lorsque le curseur survole le bouton */
+  .button:hover {
+    background-image: url("/CSS/images/texture-pierre-noire.jpg");
+    background-position: center;
+    background-size: cover;
+  
+}
+.button a:hover{
+  font-size: calc(.3rem + 1.7vw);
+     color: white;
 }
