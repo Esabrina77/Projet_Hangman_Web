@@ -13,7 +13,7 @@ const Port = "localhost:8080"
 
 // initialisation de l'espace de jeu
 func InitHandler(w http.ResponseWriter, r *http.Request) {
-	Hangman.GameDato.Life = 8
+	Hangman.GameDato.Life = 9
 	Hangman.GameDato.IsWin = Hangman.CheckWin(Hangman.GameDato.WordToGuess, Hangman.GameDato.GuessedLetters)
 
 	//strings.TrimPrefix permet de
@@ -97,6 +97,7 @@ func GuessHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Life: ", Hangman.GameDato.Life, "  win: ", toutesLesLettresTrouvees)
 		if Hangman.GameDato.Life == 0 || toutesLesLettresTrouvees {
 			http.Redirect(w, r, "/result", http.StatusSeeOther)
+			return
 		}
 		//Hangman.GameDato.MessageI = "LETTRE INCORRECT"
 	} else {

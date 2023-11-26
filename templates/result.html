@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" type="text/css" href="/CSS/style.css" >
-  <title>Jeu du Pendu - Résultat</title>
+    <link rel="stylesheet" type="text/css" href="/CSS/result.css" >
+  <title>Pendu-Résultat</title>
 </head>
 <body>
     
@@ -16,13 +16,11 @@
   <h2>Résultat</h2>
   <h3 style="color: bisque;">Score: {{.Score}}</h3>
   {{if eq .Life   0 }}
-    <img src="../CSS/images/hangman_8.png" alt="pendu 1">
-
     <h3>Dommage, vous avez perdu. Le mot à deviner était <strong style="color:olive;"> "{{.WordToGuess}}"</strong>. </h3>
-    <img src="../CSS/images/LOST.jpg" alt="perdu">
+    <img src="../CSS/images/pendu/hangman9.png" alt="pendu 1">
   {{else }}
   <h3>Bravo, vous avez trouvé toutes les lettres du mot <strong style="color:olive;">"{{.WordToGuess}}"</strong> !</h3>
-  <img src="../CSS/images/WIN.jpg" alt="perdu">
+  <img src="../CSS/images/pendu/WIN.jpg" alt="perdu">
   {{end}}
   
 

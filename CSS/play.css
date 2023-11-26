@@ -1,0 +1,88 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@font-face {
+  font-family: Akronim;
+  src: url("/CSS/fontFamily/Akronim-Regular.ttf");
+} 
+@font-face {
+    font-family: Alex;
+    src: url("/CSS/fontFamily/AlexBrush-Regular.ttf");
+  } 
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3%;
+    color: white;
+    background-image: url("../CSS/images/play.jpg");
+    background-size: cover;
+    
+}
+h1{ 
+    font-family:Akronim, sans-serif;
+    font-size: calc(.4rem + 1.8vw);
+}
+#AFFICHAGE{
+    font-family: Alex, Arial, Helvetica, sans-serif;
+    font-size: calc(.3rem + 1.6vw);
+     width: 30%;
+     height: 70%;
+     margin: 2%;
+     padding: 10px 20px ;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+   background-color: rgba(165, 42, 42, 0.292);
+   border-radius: 20%;
+}
+#image{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family:Akronim, sans-serif;
+    padding: 10px;
+    font-size: calc(.6rem + 1.3vw);
+     width:calc(10rem + 10vw);
+     height: auto;
+     background-color: rgba(13, 13, 13, 0.584);
+     border-radius: 50px;
+     color: rgb(226, 226, 226);
+}
+#image img{
+    width:auto;
+    height: calc(5rem + 4.6vw);   
+}
+
+input[type="text"] {
+  padding:0 20px;
+  font-size: calc(.2rem + 1.4vw);
+  font-family: Alex, Arial, Helvetica, sans-serif;
+  color: rgb(203, 176, 228);
+  border: none;
+  outline: none;
+  width: 5rem;
+  background: rgba(255, 255, 255, 0.087);
+  border-radius: 28%;
+}
+input[type="submit"] {
+    font-family:Akronim, sans-serif;
+    font-size: calc(.1rem + 1.0vw);
+    background-color: rgba(23, 22, 22, 0.411);
+    color: white;
+    padding: 10px 20px;
+    border-style: ridge;
+    border-radius: 50px;
+    cursor: pointer;
+}
+input[type="submit"]:hover{
+    background-image: url("/CSS/images/corde1.jpg");
+    background-position: center;
+    background-size: cover;
+    font-size: calc(.2rem + 1.2vw);
+}
+

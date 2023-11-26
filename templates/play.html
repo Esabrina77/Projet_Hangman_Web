@@ -4,54 +4,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/CSS/home.css" >
+  <link rel="stylesheet" type="text/css" href="/CSS/play.css" >
   <link rel="icon" type="image/x-icon" href="/CSS/images/stadia_controller_FILL0_wght400_GRAD0_opsz24.svg" >
 
-  <title>Jeu du Pendu - Jouer</title>
+  <title>Pendu-Jouer</title>
 </head>
 <body>
     <div id="AFFICHAGE">
   <h1>NIVEAU: {{.Difficulty}}</h1>
-  <p>Joueur: {{.Name}}</p>
-  <h3>Vie restante: {{.Life}}</h3>
-  <h3>Mot à deviner:{{.WORD}}</h3>
-  <h3>Score: {{.Score}}</h3>
-  <h3>Lettres Proposées : {{.Gameletters}}</h3>
+  <p>Joueur:  {{.Name}}</p>
+  {{if gt .Life 4}}
+  <h3 style="color: rgb(16, 169, 174);" >Vies restantes:  {{.Life}}</h3>
+  {{end}}
+  {{if eq .Life 4}}
+  <h3 style="color: rgb(219, 191, 12);" >Vies restantes:  {{.Life}}</h3>
+  {{end}}
+  {{if lt .Life 4}}
+  <h3 style="color: red;" >Vies restantes:  {{.Life}}</h3>
+  {{end}}
+
+
+  <h3 style="color: rgb(190, 149, 214);" >Mot à deviner:  {{.WORD}}</h3>
+  <h3 style="color: rgb(48, 146, 31);">Score:   {{.Score}}</h3>
+
+  <h3>Lettres Proposées: <strong style="color: rgb(53, 104, 108);"> {{.Gameletters}} </strong></h3>
   <h3 style="color: red;">{{.MessageR}}</h3>
+
    <form action="/guess" method="POST">
     <label for="guessedLetter">Lettre à proposer:</label>
     <input type="text" id="guessedLetter" name="guessedLetter" maxlength="1" required oninvalid="this.setCustomValidity('Veuillez entrer une lettre')"
 		oninput="this.setCustomValidity('')">
     <br>
+           <!-- <button type="submit">Proposer</button> -->
+           <input type="submit" value="Proposer">
+          </form>
+        </div>
+<div id="image">
+  {{if eq .Life 9}}
+    <img src="../CSS/images/pendu/hangman0.png" alt="pendu 0" >
+    {{end}}
     {{if eq .Life 8}}
-    <img src="../CSS/images/pendu/hangman_0.png" alt="pendu 0">
+    <img src="../CSS/images/pendu/hangman1.png" alt="pendu 1" >
+    <p>Ce n'est qu'une erreur, Ca arrive à tous le monde</p>
     {{end}}
     {{if eq .Life 7}}
-    <img src="../CSS/images/pendu/hangman_1.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman2.png" alt="pendu 2" onload="playMusic('myAudio2')">
+    <p>Ce n'est pas grave {{.Name}}. </p>
+    <p>Je  crois en toi</p>
     {{end}}
     {{if eq .Life 6}}
-    <img src="../CSS/images/pendu/hangman_2.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman3.png" alt="pendu 3" onload="playMusic('myAudio2')">
+    <p>OUPS, Sois plus vigilant</p>
     {{end}}
     {{if eq .Life 5}}
-    <img src="../CSS/images/pendu/hangman_3.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman4.png" alt="pendu 4"onload="playMusic('myAudio3')">
+    <p> Aïe  Aïe  Aïe,Ca devient chaud là {{.Name}}</p>
     {{end}}
     {{if eq .Life 4}}
-    <img src="../CSS/images/pendu/hangman_4.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman5.png" alt="pendu 5"onload="playMusic('myAudio3')">
+    <p>4vies,4chance de réussir, Allez {{.Name}}!!!</p>
     {{end}}
     {{if eq .Life 3}}
-    <img src="../CSS/images/pendu/hangman_5.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman6.png" alt="pendu 6"onload="playMusic('myAudio')">
+    <p>Veux-tu vraiment devenir une mauviette {{.Name}} ??</p>
     {{end}}
     {{if eq .Life 2}}
-    <img src="../CSS/images/pendu/hangman_6.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman7.png" alt="pendu 1"onload="playMusic('myAudio')">
+    <p>Tu es au bord du gouffre {{.Name}}</p>
     {{end}}
     {{if eq .Life 1}}
-    <img src="../CSS/images/pendu/hangman_7.png" alt="pendu 1">
+    <img src="../CSS/images/pendu/hangman8.png" alt="pendu 1"onload="playMusic( 'myAudio1')">
+    <p>Tic Tac, plus qu'une  chance {{.Name}}</p>
     {{end}}
-
-       <!-- <button type="submit">Proposer</button> -->
-        <input type="submit" value="Proposer">
-  </form>
-</div>
+    <audio id="myAudio" src="/CSS/musics/lost-soul_60sec-177570.mp3" loop></audio>
+    <audio id="myAudio1" src="/CSS/musics/horror-168814.mp3" loop></audio>
+    <audio id="myAudio2" src="/CSS/musics/the-enigmax27s-edge-165588.mp3" loop></audio>
+    <audio id="myAudio3" src="/CSS/musics/creepy-music-box-halloween-music-horror-scary-spooky-dark-ambient-118577.mp3" loop></audio>
+  </div>
+<script src="/CSS/java.js"> </script>
 </body>
 </html>
 {{end}}

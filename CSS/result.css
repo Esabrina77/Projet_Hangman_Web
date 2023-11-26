@@ -1,0 +1,83 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@font-face {
+  font-family: Akronim;
+  src: url("/CSS/fontFamily/Akronim-Regular.ttf");
+} 
+body{
+    margin: 30px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+   background-size: cover;
+    background-image: url("/CSS/images/maison1.jpg")
+}
+#result{
+    font-family:  Akronim;
+    font-size: calc(.3rem + 1.6vw);
+    align-self: center;
+     width: 50%;
+     height: 70%;
+     margin: 2%;
+     padding: 10px 20px ;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+ background-color: rgba(0, 0, 0, 0.4);
+}
+
+#result img{
+    width:auto;
+    height: calc(5rem + 4.6vw);   
+}
+
+
+.container {
+    padding:0 10px;
+    font-size: 2em;
+    color: rgb(255, 255, 255);
+    position: relative;
+    cursor: pointer;
+    border-style:none;
+    border-color: rgb(40, 39, 39);
+    border-radius: 20px;
+    z-index: 5;
+  }
+
+  
+  .container a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-family:  Akronim,sans-serif;
+  }
+  .container i {
+    margin-left: 5px;
+    font-size: 1.2rem;
+    transition: all .5s;
+  }
+  
+  .container a:hover ~ i {
+    transform: translateX(10px);
+  }
+  .bg {
+    position: absolute;
+    bottom: 3px;
+    left: -4px;
+    border-radius: 10px;
+    width: 25%;
+    height: 25%;
+    z-index: -1;
+    background-image: linear-gradient(147deg, rgba(32, 32, 29, 0.541) 0%, rgb(176, 0, 0) 74%);
+    transition: all .5s;
+  }
+  .container a:hover ~ .bg {
+    width: 90%;
+  }
+  .container a:hover{
+    font-size: calc(1rem + 2vw);
+  }

@@ -59,7 +59,7 @@ func UpdateLife(lettre string) {
 	if !strings.Contains(GameDato.WordToGuess, lettre) {
 		GameDato.Life--
 	} else {
-		GameDato.Score++
+		GameDato.Score += 2
 	}
 }
 
