@@ -1,10 +1,12 @@
 package Hangman
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
 	"strings"
+	"sync"
 )
 
 // structure pour le stock des données de la partie en cours
@@ -24,6 +26,7 @@ type GameData struct {
 }
 
 var (
+	mu               sync.Mutex
 	GameDato         GameData
 	Mots             []string
 	Lettresproposees = make(map[string]bool) //verification
@@ -121,4 +124,23 @@ func RetreiveWord() {
 		log.Fatal(err)
 	}
 	Mots = strings.Split(string(content), "\n")
+}
+
+func SaveScore(name string, score int) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	// Ouvrir le fichier en mode append
+	file, err := os.OpenFile("GAME/score.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Erreur lors de l'ouverture du fichier score.txt :", err)
+		return
+	}
+	defer file.Close()
+
+	// Écrire le score dans le fichier
+	_, err = fmt.Fprintf(file, "Nom: %s, Score: %d\n", name, score)
+	if err != nil {
+		fmt.Println("Erreur lors de l'écriture dans le fichier score.txt :", err)
+	}
 }

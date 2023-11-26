@@ -9,7 +9,11 @@ import (
 
 func main() {
 	fmt.Println("server is running...")
-	fmt.Print("click her to play---> http://localhost:8080/home")
+
+	fmt.Println("")
+	fmt.Print("CLICK HERE to play---> http://localhost:8080/home \n")
+	fmt.Println("")
+	fmt.Println("TO STOP THE SERVER , PRESS  'ctrl+C' ")
 	initTemplate.InitTemplate()
 	routeur.InitServe()
 
