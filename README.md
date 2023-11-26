@@ -11,7 +11,7 @@ go run ./main.go
 Ensuite, il devrait afficher que :
 
 server is running...
-click her to play---> http://localhost:8080/home
+CLICK HERE to play---> http://localhost:8080/home
 TO STOP THE SERVER , PRESS  "ctrl+C" :
 WARNING: NE FERMEZ PAS LE TERMINAL! Sinon le serveur s’arrêtera automatiquement.
 
