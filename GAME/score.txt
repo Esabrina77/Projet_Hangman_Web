@@ -1,2 +1,7 @@
 Nom: lope, Score: 8
 Nom: poles, Score: 8
+Nom: kolo, Score: 4
+Nom: loli, Score: 0
+Nom: loli, Score: 0
+Nom: loli, Score: 0
+Nom: loli, Score: 0

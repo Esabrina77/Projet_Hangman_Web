@@ -7,30 +7,70 @@
   font-family: Akronim;
   src: url("/CSS/fontFamily/Akronim-Regular.ttf");
 } 
+@font-face {
+    font-family: Alex;
+    src: url("/CSS/fontFamily/AlexBrush-Regular.ttf");
+  } 
 body{
-    margin: 30px; 
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 4%;
     color: white;
-   background-size: cover;
-   background-repeat: no-repeat;
-    background-image: url("/CSS/images/texture-pierre-noire.jpg");
-
+    background-image: url("../CSS/images/play.jpg");
+    background-size: cover;
+    
 }
-#HomeScreen{
-    font-family:  Akronim;
-    font-size: calc(.3rem + 1.6vw);
-    align-self: center;
-     width: 50%;
-     height: 70%;
-     margin: 2%;
-     padding: 10px 20px ;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     align-items: center;
-    background-image: url("../CSS/forêt.jpeg");
+h1{ 
+    font-family:Akronim, sans-serif;
+    font-size: calc(.4rem + 1.8vw);
+}
+
+#image{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family:Akronim, sans-serif;
+    padding: 20px;
+    font-size: calc(.6rem + 1.3vw);
+     width:50%;
+     height: auto;
+     background-color: rgba(13, 13, 13, 0.747);
+     border-radius: 70px;
+     color: rgb(255, 255, 255);
+}
+#image img{
+    width:auto;
+    height: calc(7rem + 4.6vw);   
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+.button {
+    font-family:Akronim;
+    font-size: calc(.2rem + 1.1vw);
+    /* font-size: calc(.3rem + 1.6vw); */
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    background-color: rgb(37, 54, 49);
+    border-radius: 50px;
+    border-style: inset;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-image: url("/CSS/images/forêt.jpeg");
     background-position: center;
     background-size: cover;
+    font-size: calc(.3rem + 1.4vw);
+    /* font-size: calc(.3rem + 1.7vw); */
+  
+}
+.button a:hover{
+     color: white;
 }
