@@ -58,10 +58,10 @@ func SelectionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PlayHandler(w http.ResponseWriter, r *http.Request) {
-	if !Activated {
-		http.Redirect(w, r, "/selection", http.StatusSeeOther)
-		return
-	}
+	// if !Activated {
+	// 	http.Redirect(w, r, "/selection", http.StatusSeeOther)
+	// 	return
+	// }
 	Hangman.GameDato.WORD = strings.Join(Hangman.GameDato.Affichage, "")
 	Hangman.GameDato.Gameletters = strings.Join(Hangman.GameDato.GuessedLetters, ", ")
 
