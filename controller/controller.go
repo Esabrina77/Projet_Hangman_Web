@@ -11,8 +11,11 @@ import (
 // VARIABLES & CONSTANTES
 const Port = "localhost:8080"
 
+var Activated bool
+
 // initialisation de l'espace de jeu
 func InitHandler(w http.ResponseWriter, r *http.Request) {
+	Activated = true
 	Hangman.GameDato.Life = 9
 	Hangman.GameDato.IsWin = Hangman.CheckWin(Hangman.GameDato.WordToGuess, Hangman.GameDato.GuessedLetters)
 
@@ -55,6 +58,10 @@ func SelectionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PlayHandler(w http.ResponseWriter, r *http.Request) {
+	if !Activated {
+		http.Redirect(w, r, "/selection", http.StatusSeeOther)
+		return
+	}
 	Hangman.GameDato.WORD = strings.Join(Hangman.GameDato.Affichage, "")
 	Hangman.GameDato.Gameletters = strings.Join(Hangman.GameDato.GuessedLetters, ", ")
 
@@ -73,12 +80,13 @@ func HelpHandler(w http.ResponseWriter, r *http.Request) {
 
 func ResultHandler(w http.ResponseWriter, r *http.Request) {
 	resultData := Hangman.GameDato
+
 	Hangman.GameDato = Hangman.GameData{} //reset le jeu
 	Hangman.GameDato.Name = resultData.Name
 	Hangman.Lettresproposees = make(map[string]bool)
 	Hangman.SaveScore(resultData.Name, resultData.Score)
 	//SAUVEGARDE DU SCORE DES JOUEURS
-
+	Activated = false
 	initTemplate.Temp.ExecuteTemplate(w, "result", resultData)
 }
 func GuessHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,3 +1,6 @@
 Nom: kheir, Score: 10
 Nom: Thorgan, Score: 6
 
+Nom: Speed, Score: 6
+Nom: Thorgan, Score: 12
+Nom: Thorgan, Score: 2
