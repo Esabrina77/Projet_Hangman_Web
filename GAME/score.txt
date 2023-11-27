@@ -1,2 +1,2 @@
-Nom: LOLI, Score: 8
-Nom: LOLI, Score: 16
+Nom: lope, Score: 8
+Nom: poles, Score: 8

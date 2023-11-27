@@ -75,7 +75,6 @@ func ResultHandler(w http.ResponseWriter, r *http.Request) {
 	resultData := Hangman.GameDato
 	Hangman.GameDato = Hangman.GameData{} //reset le jeu
 	Hangman.GameDato.Name = resultData.Name
-	Hangman.GameDato.Score = resultData.Score
 	Hangman.Lettresproposees = make(map[string]bool)
 	Hangman.SaveScore(resultData.Name, resultData.Score)
 	//SAUVEGARDE DU SCORE DES JOUEURS
