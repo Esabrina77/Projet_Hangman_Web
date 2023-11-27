@@ -7,6 +7,9 @@
   font-family: Akronim;
   src: url("/CSS/fontFamily/Akronim-Regular.ttf");
 } 
+h3{
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
 body{
     margin: 30px; 
     display: flex;
@@ -28,7 +31,7 @@ body{
      flex-direction: column;
      justify-content: center;
      align-items: center;
- background-color: rgba(0, 0, 0, 0.4);
+ background-color: rgba(0, 0, 0, 0.525);
 }
 
 #result img{
@@ -72,7 +75,7 @@ body{
     width: 25%;
     height: 25%;
     z-index: -1;
-    background-image: linear-gradient(147deg, rgba(32, 32, 29, 0.541) 0%, rgb(176, 0, 0) 74%);
+    background-image: linear-gradient(147deg, rgba(32, 32, 29, 0.541) 0%, rgb(86, 59, 10) 74%);
     transition: all .5s;
   }
   .container a:hover ~ .bg {
