@@ -4,14 +4,19 @@ import (
 	"fmt"
 	Hangman "hangman/GAME"
 	initTemplate "hangman/templates"
+	"io/ioutil"
 	"net/http"
 	"strings"
+	"sync"
 )
 
 // VARIABLES & CONSTANTES
 const Port = "localhost:8080"
 
-var Activated bool
+var (
+	mu        sync.Mutex
+	Activated bool
+)
 
 // initialisation de l'espace de jeu
 func InitHandler(w http.ResponseWriter, r *http.Request) {
@@ -119,4 +124,26 @@ func GuessHandler(w http.ResponseWriter, r *http.Request) {
 	Hangman.GameDato.GuessedLetters = append(Hangman.GameDato.GuessedLetters, lettre)
 	http.Redirect(w, r, "/play", http.StatusSeeOther)
 
+}
+
+func ViewScoreHandler(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	// Lire le contenu du fichier score.txt
+	content, err := ioutil.ReadFile("GAME/score.txt")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Erreur lors de la lecture du fichier score.txt : %v", err), http.StatusInternalServerError)
+		return
+	}
+	// content, err := os.ReadFile("GAME/score.txt")
+	// if err != nil {
+	// 	http.Error(w, fmt.Sprintf("Erreur lors de la lecture du fichier score.txt : %v", err), http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// Envoyer le contenu comme réponse HTTP
+	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	w.Write(content)
 }

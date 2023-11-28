@@ -69,7 +69,7 @@ input[type="submit"]:hover{
     background-image: url("/CSS/images/corde1.jpg");
     background-position: center;
     background-size: cover;
-    font-size: calc(.3rem + 1.4vw);
+   
 }
 
   .button {
@@ -91,9 +91,6 @@ input[type="submit"]:hover{
     background-image: url("/CSS/images/texture-pierre-noire.jpg");
     background-position: center;
     background-size: cover;
-    font-size: calc(.3rem + 1.4vw);
-    /* font-size: calc(.3rem + 1.7vw); */
-  
 }
 .button a:hover{
      color: white;

@@ -1,6 +1,7 @@
 Nom: kheir, Score: 10
 Nom: Thorgan, Score: 6
-
 Nom: Speed, Score: 6
 Nom: Thorgan, Score: 12
 Nom: Thorgan, Score: 2
+Nom: po, Score: 14
+[2023-11-28 09:18:04] Nom: ojo, Score: 8

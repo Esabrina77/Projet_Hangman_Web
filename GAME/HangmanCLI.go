@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 )
 
 // structure pour le stock des données de la partie en cours
@@ -138,9 +139,11 @@ func SaveScore(name string, score int) {
 	}
 	defer file.Close()
 
-	// Écrire le score dans le fichier
-	_, err = fmt.Fprintf(file, "Nom: %s, Score: %d\n", name, score)
+	currentTime := time.Now()
+
+	// Écrire le score et le nom du joueur dans"score.txt"
+	_, err = fmt.Fprintf(file, "Date: [%s] Nom: %s, Score: %d\n", currentTime.Format("2006-01-02 15:04:05"), name, score)
 	if err != nil {
-		fmt.Println("Erreur lors de l'écriture dans le fichier score.txt :", err)
+		fmt.Println("Erreur lors de l'écriture dans le fichier score.txt:", err)
 	}
 }

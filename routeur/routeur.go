@@ -19,6 +19,7 @@ func InitServe() {
 	http.HandleFunc("/help", controller.HelpHandler)
 	http.HandleFunc("/treatment", controller.TreatHandler)
 	http.HandleFunc("/guess", controller.GuessHandler)
+	http.HandleFunc("/viewscore", controller.ViewScoreHandler)
 	if err := http.ListenAndServe(controller.Port, nil); err != nil {
 		log.Fatal(err)
 	}

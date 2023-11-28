@@ -33,7 +33,7 @@
    <form action="/guess" method="POST">
     <label for="guessedLetter">Lettre à proposer:</label>
     <input type="text" id="guessedLetter" name="guessedLetter" maxlength="1" required oninvalid="this.setCustomValidity('Veuillez entrer une lettre')"
-		oninput="this.setCustomValidity('')">
+    oninput="this.setCustomValidity('')" onkeyup="convertToLowerCase(this)">
     <br>
            <!-- <button type="submit">Proposer</button> -->
            <input type="submit" value="Proposer">
