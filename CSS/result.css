@@ -21,7 +21,7 @@ body{
 }
 #result{
     font-family:  Akronim;
-    font-size: calc(.3rem + 1.6vw);
+    font-size: calc(.2rem + 1.3vw);
     align-self: center;
      width: 50%;
      height: 70%;
@@ -80,7 +80,4 @@ body{
   }
   .container a:hover ~ .bg {
     width: 90%;
-  }
-  .container a:hover{
-    font-size: calc(1rem + 2vw);
   }

@@ -108,7 +108,12 @@ func AfficherMot(guess string) {
 	}
 }
 
+func IsLetter(c byte) bool {
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+}
+
 func LettreDejaProposee(lettre string, Lettresproposees map[string]bool) bool {
+	// isLetter vérifie si le caractère est une lettre
 	for k := range Lettresproposees {
 		if strings.ContainsRune(k, []rune(lettre)[0]) {
 			return true
@@ -142,7 +147,7 @@ func SaveScore(name string, score int) {
 	currentTime := time.Now()
 
 	// Écrire le score et le nom du joueur dans"score.txt"
-	_, err = fmt.Fprintf(file, "Date: [%s] Nom: %s, Score: %d\n", currentTime.Format("2006-01-02 15:04:05"), name, score)
+	_, err = fmt.Fprintf(file, "Nom: %s, Score: %d Date: %s  \n", name, score, currentTime.Format("2006-01-02 15:04:05"))
 	if err != nil {
 		fmt.Println("Erreur lors de l'écriture dans le fichier score.txt:", err)
 	}

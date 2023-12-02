@@ -92,12 +92,15 @@ func ResultHandler(w http.ResponseWriter, r *http.Request) {
 	Hangman.SaveScore(resultData.Name, resultData.Score)
 	//SAUVEGARDE DU SCORE DES JOUEURS
 	Activated = false
+
 	initTemplate.Temp.ExecuteTemplate(w, "result", resultData)
 }
 func GuessHandler(w http.ResponseWriter, r *http.Request) {
 	lettre := r.FormValue("guessedLetter")
-	fmt.Println(lettre)
+	lettreByte := lettre[0]
+	_ = Hangman.IsLetter(lettreByte)
 
+	fmt.Println(lettreByte)
 	var toutesLesLettresTrouvees bool
 
 	if !Hangman.LettreDejaProposee(lettre, Hangman.Lettresproposees) {

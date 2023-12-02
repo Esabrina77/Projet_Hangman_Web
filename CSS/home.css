@@ -7,6 +7,7 @@
   font-family: Akronim;
   src: url("/CSS/fontFamily/Akronim-Regular.ttf");
 } 
+
 body{
     margin: 30px; 
     background-color: rgb(0, 0, 0);
@@ -30,7 +31,7 @@ body{
     background-image: url("../CSS/images/forêt.jpeg");
     background-position: center;
     background-size: cover;
-    background-repeat: no-repeat;
+ 
 }
 
 a{
