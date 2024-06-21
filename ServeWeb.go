@@ -3,6 +3,7 @@ package main
 import (
 	//Hangman "hangman/GAME"
 	"fmt"
+	 "os"
 	routeur "hangman/routeur"
 	initTemplate "hangman/templates"
 )
