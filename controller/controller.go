@@ -2,37 +2,64 @@ package controller
 
 import (
 	"fmt"
-	Hangman "hangman/GAME"
-	initTemplate "hangman/templates"
+	"hangman/GAME"
+	"hangman/templates"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"sync"
+
+	"github.com/gorilla/sessions"
 )
 
 // VARIABLES & CONSTANTES
 var (
 	mu        sync.Mutex
 	Activated bool
+	store     = sessions.NewCookieStore([]byte("secret-key"))
 )
+
+func getSessionData(r *http.Request) (*Hangman.GameData, *sessions.Session, error) {
+	session, err := store.Get(r, "hangman-session")
+	if err != nil {
+		return nil, nil, err
+	}
+	gameData, ok := session.Values["gameData"].(*Hangman.GameData)
+	if !ok || gameData == nil {
+		gameData = &Hangman.GameData{}
+		session.Values["gameData"] = gameData
+	}
+	return gameData, session, nil
+}
 
 // initialisation de l'espace de jeu
 func InitHandler(w http.ResponseWriter, r *http.Request) {
 	Activated = true
-	Hangman.GameDato.Life = 9
-	Hangman.GameDato.IsWin = Hangman.CheckWin(Hangman.GameDato.WordToGuess, Hangman.GameDato.GuessedLetters)
+	gameData, session, err := getSessionData(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	gameData.Life = 9
+	gameData.IsWin = Hangman.CheckWin(gameData.WordToGuess, gameData.GuessedLetters)
 
 	//strings.TrimPrefix permet de
-	Hangman.GameDato.Difficulty = strings.TrimPrefix(r.URL.Path, "/init/")
-	switch Hangman.GameDato.Difficulty {
+	gameData.Difficulty = strings.TrimPrefix(r.URL.Path, "/init/")
+	switch gameData.Difficulty {
 	case "Facile", "Moyen", "Difficile", "Goldlevel":
 		break
 	default:
 		http.Redirect(w, r, "/selection", http.StatusMovedPermanently)
+		return
 	}
 	Hangman.RetreiveWord()
-	Hangman.SetWord(Hangman.GameDato.Difficulty)
-	Hangman.InitMot()
+	Hangman.SetWord(gameData.Difficulty, gameData)
+	Hangman.InitMot(gameData)
+	if err = session.Save(r, w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	http.Redirect(w, r, "/play", http.StatusSeeOther)
 }
@@ -40,60 +67,99 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-	initTemplate.Temp.ExecuteTemplate(w, "home", nil)
+	templates.Temp.ExecuteTemplate(w, "home", nil)
 }
 
 func TreatHandler(w http.ResponseWriter, r *http.Request) {
-	Hangman.GameDato.Name = r.FormValue("name")
-	if Hangman.GameDato.Name == "" {
-		errorMessage := "VEILLEZ REMPLIR TOUS  LES CHAMPS DU FORMULAIRE"
+	gameData, session, err := getSessionData(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	gameData.Name = r.FormValue("name")
+	if gameData.Name == "" {
+		errorMessage := "VEILLEZ REMPLIR TOUS LES CHAMPS DU FORMULAIRE"
 		http.Redirect(w, r, "/user/home?error="+errorMessage, http.StatusSeeOther)
 		return
 	}
+	if err = session.Save(r, w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	http.Redirect(w, r, "/selection", http.StatusSeeOther)
-
 }
 
 func SelectionHandler(w http.ResponseWriter, r *http.Request) {
+	gameData, _, err := getSessionData(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-	initTemplate.Temp.ExecuteTemplate(w, "selection", Hangman.GameDato.Name)
+	templates.Temp.ExecuteTemplate(w, "selection", gameData.Name)
 }
 
 func PlayHandler(w http.ResponseWriter, r *http.Request) {
+	gameData, _, err := getSessionData(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	// if !Activated {
 	// 	http.Redirect(w, r, "/selection", http.StatusSeeOther)
 	// 	return
 	// }
-	Hangman.GameDato.WORD = strings.Join(Hangman.GameDato.Affichage, "")
-	Hangman.GameDato.Gameletters = strings.Join(Hangman.GameDato.GuessedLetters, ", ")
+	gameData.WORD = strings.Join(gameData.Affichage, "")
+	gameData.Gameletters = strings.Join(gameData.GuessedLetters, ", ")
 
-	fmt.Println(Hangman.GameDato.Affichage)
-	fmt.Println(Hangman.GameDato.WordToGuess)
-	initTemplate.Temp.ExecuteTemplate(w, "play", Hangman.GameDato)
+	fmt.Println(gameData.Affichage)
+	fmt.Println(gameData.WordToGuess)
+	templates.Temp.ExecuteTemplate(w, "play", gameData)
 }
 
 func GetOutHandler(w http.ResponseWriter, r *http.Request) {
-	initTemplate.Temp.ExecuteTemplate(w, "getOut", nil)
+	templates.Temp.ExecuteTemplate(w, "getOut", nil)
 }
 
 func HelpHandler(w http.ResponseWriter, r *http.Request) {
-	initTemplate.Temp.ExecuteTemplate(w, "Help", nil)
+	templates.Temp.ExecuteTemplate(w, "Help", nil)
 }
 
 func ResultHandler(w http.ResponseWriter, r *http.Request) {
-	resultData := Hangman.GameDato
+	gameData, session, err := getSessionData(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	Hangman.GameDato = Hangman.GameData{} //reset le jeu
-	Hangman.GameDato.Name = resultData.Name
+	resultData := *gameData
+
+	*gameData = Hangman.GameData{} //reset le jeu
+	gameData.Name = resultData.Name
 	Hangman.Lettresproposees = make(map[string]bool)
 	Hangman.SaveScore(resultData.Name, resultData.Score)
 	//SAUVEGARDE DU SCORE DES JOUEURS
 	Activated = false
 
-	initTemplate.Temp.ExecuteTemplate(w, "result", resultData)
+	if err = session.Save(r, w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	templates.Temp.ExecuteTemplate(w, "result", resultData)
 }
+
 func GuessHandler(w http.ResponseWriter, r *http.Request) {
+	gameData, session, err := getSessionData(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	lettre := r.FormValue("guessedLetter")
 	lettreByte := lettre[0]
 	_ = Hangman.IsLetter(lettreByte)
@@ -102,29 +168,36 @@ func GuessHandler(w http.ResponseWriter, r *http.Request) {
 	var toutesLesLettresTrouvees bool
 
 	if !Hangman.LettreDejaProposee(lettre, Hangman.Lettresproposees) {
-		Hangman.GameDato.MessageR = ""
-		Hangman.AfficherMot(lettre)
-		Hangman.UpdateLife(lettre)
-		fmt.Println("wordtoguess: ", Hangman.GameDato.WordToGuess, "  Hangman.GameDato.Affichage: ", strings.Join(Hangman.GameDato.Affichage, ""))
-		if Hangman.GameDato.WordToGuess == strings.Join(Hangman.GameDato.Affichage, "") {
+		gameData.MessageR = ""
+		Hangman.AfficherMot(lettre, gameData)
+		Hangman.UpdateLife(lettre, gameData)
+		fmt.Println("wordtoguess: ", gameData.WordToGuess, "  gameData.Affichage: ", strings.Join(gameData.Affichage, ""))
+		if gameData.WordToGuess == strings.Join(gameData.Affichage, "") {
 			toutesLesLettresTrouvees = true
-			fmt.Println("Check win: ", Hangman.GameDato.WordToGuess == strings.Join(Hangman.GameDato.Affichage, ""))
+			fmt.Println("Check win: ", gameData.WordToGuess == strings.Join(gameData.Affichage, ""))
 		}
-		fmt.Println("Life: ", Hangman.GameDato.Life, "  win: ", toutesLesLettresTrouvees)
-		if Hangman.GameDato.Life == 0 || toutesLesLettresTrouvees {
+		fmt.Println("Life: ", gameData.Life, "  win: ", toutesLesLettresTrouvees)
+		if gameData.Life == 0 || toutesLesLettresTrouvees {
+			if err = session.Save(r, w); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			http.Redirect(w, r, "/result", http.StatusSeeOther)
 			return
 		}
-		//Hangman.GameDato.MessageI = "LETTRE INCORRECT"
+		//gameData.MessageI = "LETTRE INCORRECT"
 	} else {
-		//Hangman.GameDato.MessageI = ""
-		Hangman.GameDato.MessageR = "lettre déjà proposée"
+		//gameData.MessageI = ""
+		gameData.MessageR = "lettre déjà proposée"
 		fmt.Println("lettre déjà proposée")
 	}
 
-	Hangman.GameDato.GuessedLetters = append(Hangman.GameDato.GuessedLetters, lettre)
+	gameData.GuessedLetters = append(gameData.GuessedLetters, lettre)
+	if err = session.Save(r, w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	http.Redirect(w, r, "/play", http.StatusSeeOther)
-
 }
 
 func ViewScoreHandler(w http.ResponseWriter, r *http.Request) {
@@ -137,11 +210,6 @@ func ViewScoreHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("Erreur lors de la lecture du fichier score.txt : %v", err), http.StatusInternalServerError)
 		return
 	}
-	// content, err := os.ReadFile("GAME/score.txt")
-	// if err != nil {
-	// 	http.Error(w, fmt.Sprintf("Erreur lors de la lecture du fichier score.txt : %v", err), http.StatusInternalServerError)
-	// 	return
-	// }
 
 	// Envoyer le contenu comme réponse HTTP
 	w.Header().Set("Content-Type", "text/plain")
