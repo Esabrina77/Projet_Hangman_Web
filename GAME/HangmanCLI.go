@@ -28,25 +28,23 @@ type GameData struct {
 
 var (
 	mu               sync.Mutex
-	GameDato         GameData
 	Mots             []string
 	Lettresproposees = make(map[string]bool) //verification
 )
 
-func SetWord(level string) {
+func SetWord(level string, gameData *GameData) {
 	switch level {
 	case "Facile":
-		GameDato.WordToGuess = ChoisirMot(Mots, 2, 4)
+		gameData.WordToGuess = ChoisirMot(Mots, 2, 4)
 	case "Moyen":
-		GameDato.WordToGuess = ChoisirMot(Mots, 5, 6)
+		gameData.WordToGuess = ChoisirMot(Mots, 5, 6)
 	case "Difficile":
-		GameDato.WordToGuess = ChoisirMot(Mots, 7, 11)
+		gameData.WordToGuess = ChoisirMot(Mots, 7, 11)
 	case "Goldlevel":
-		GameDato.WordToGuess = ChoisirMot(Mots, 12, 30)
+		gameData.WordToGuess = ChoisirMot(Mots, 12, 30)
 	default:
-		GameDato.WordToGuess = ChoisirMot(Mots, 2, 700)
+		gameData.WordToGuess = ChoisirMot(Mots, 2, 700)
 	}
-
 }
 
 func Contains(slice []string, str string) bool {
@@ -59,11 +57,11 @@ func Contains(slice []string, str string) bool {
 }
 
 // Mise à jour de la vie
-func UpdateLife(lettre string) {
-	if !strings.Contains(GameDato.WordToGuess, lettre) {
-		GameDato.Life--
+func UpdateLife(lettre string, gameData *GameData) {
+	if !strings.Contains(gameData.WordToGuess, lettre) {
+		gameData.Life--
 	} else {
-		GameDato.Score += 2
+		gameData.Score += 2
 	}
 }
 
@@ -92,18 +90,19 @@ func ChoisirMot(mots []string, minLen, maxLen int) string {
 }
 
 // POUR masquer lettres pas encore devinées
-func InitMot() {
-	GameDato.Affichage = make([]string, len(GameDato.WordToGuess))
-	for i := range GameDato.WordToGuess {
-		GameDato.Affichage[i] = "_ "
+func InitMot(gameData *GameData) {
+	gameData.Affichage = make([]string, len(gameData.WordToGuess))
+	for i := range gameData.WordToGuess {
+		gameData.Affichage[i] = "_ "
 	}
 }
-func AfficherMot(guess string) {
-	wordRunes := []rune(GameDato.WordToGuess)
+
+func AfficherMot(guess string, gameData *GameData) {
+	wordRunes := []rune(gameData.WordToGuess)
 	guessRunes := []rune(guess)[0]
 	for i, char := range wordRunes {
 		if char == guessRunes {
-			GameDato.Affichage[i] = string(guess)
+			gameData.Affichage[i] = string(guess)
 		}
 	}
 }
@@ -146,7 +145,7 @@ func SaveScore(name string, score int) {
 
 	currentTime := time.Now()
 
-	// Écrire le score et le nom du joueur dans"score.txt"
+	// Écrire le score et le nom du joueur dans "score.txt"
 	_, err = fmt.Fprintf(file, "Nom: %s, Score: %d Date: %s  \n", name, score, currentTime.Format("2006-01-02 15:04:05"))
 	if err != nil {
 		fmt.Println("Erreur lors de l'écriture dans le fichier score.txt:", err)
