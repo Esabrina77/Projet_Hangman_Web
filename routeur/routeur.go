@@ -20,7 +20,13 @@ func InitServe() {
 	http.HandleFunc("/treatment", controller.TreatHandler)
 	http.HandleFunc("/guess", controller.GuessHandler)
 	http.HandleFunc("/viewscore", controller.ViewScoreHandler)
-	if err := http.ListenAndServe(controller.Port, nil); err != nil {
-		log.Fatal(err)
-	}
+	
+	port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080" // Fallback au port 8080 si la variable d'environnement PORT n'est pas définie
+    }
+
+    if err := http.ListenAndServe("0.0.0.0:"+port, nil); err != nil {
+        log.Fatal(err)
+    }
 }
