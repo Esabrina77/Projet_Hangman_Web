@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"hangman/GAME"
-	"hangman/templates"
+	Hangman "hangman/GAME"
+	initTemplate "hangman/templates"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -67,7 +67,7 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-	templates.Temp.ExecuteTemplate(w, "home", nil)
+	initTemplate.Temp.ExecuteTemplate(w, "home", nil)
 }
 
 func TreatHandler(w http.ResponseWriter, r *http.Request) {
@@ -99,7 +99,7 @@ func SelectionHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-	templates.Temp.ExecuteTemplate(w, "selection", gameData.Name)
+	initTemplate.Temp.ExecuteTemplate(w, "selection", gameData.Name)
 }
 
 func PlayHandler(w http.ResponseWriter, r *http.Request) {
@@ -118,15 +118,15 @@ func PlayHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(gameData.Affichage)
 	fmt.Println(gameData.WordToGuess)
-	templates.Temp.ExecuteTemplate(w, "play", gameData)
+	initTemplate.Temp.ExecuteTemplate(w, "play", gameData)
 }
 
 func GetOutHandler(w http.ResponseWriter, r *http.Request) {
-	templates.Temp.ExecuteTemplate(w, "getOut", nil)
+	initTemplate.Temp.ExecuteTemplate(w, "getOut", nil)
 }
 
 func HelpHandler(w http.ResponseWriter, r *http.Request) {
-	templates.Temp.ExecuteTemplate(w, "Help", nil)
+	initTemplate.Temp.ExecuteTemplate(w, "Help", nil)
 }
 
 func ResultHandler(w http.ResponseWriter, r *http.Request) {
@@ -150,7 +150,7 @@ func ResultHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.Temp.ExecuteTemplate(w, "result", resultData)
+	initTemplate.Temp.ExecuteTemplate(w, "result", resultData)
 }
 
 func GuessHandler(w http.ResponseWriter, r *http.Request) {
@@ -215,4 +215,5 @@ func ViewScoreHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
 	w.Write(content)
+
 }
