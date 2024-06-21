@@ -3,6 +3,7 @@ package routeur
 import (
 	"hangman/controller"
 	"log"
+	 "os"
 	"net/http"
 )
 
