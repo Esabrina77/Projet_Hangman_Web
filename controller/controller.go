@@ -11,8 +11,6 @@ import (
 )
 
 // VARIABLES & CONSTANTES
-const Port = "localhost:8080"
-
 var (
 	mu        sync.Mutex
 	Activated bool
